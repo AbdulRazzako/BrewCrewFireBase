@@ -1,4 +1,5 @@
 import 'package:brew_crew/services/auth.dart';
+import 'package:brew_crew/shared/constants.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
@@ -11,10 +12,12 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
 
   //text field state
   String email = '';
   String password = '';
+  String error = '';
 
   @override
   Widget build(BuildContext context) {
@@ -42,16 +45,23 @@ class _RegisterState extends State<Register> {
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
         child: Form(
+          key: _formKey,
           child: Column(
             children: [
               SizedBox(height: 20),
               TextFormField(
+                decoration: textInputDecoration(hintText: 'Email'),
+                validator: (val) => val.isEmpty ? 'Enter an email' : null,
                 onChanged: (val) {
                   setState(() => email = val);
                 },
               ),
               SizedBox(height: 20),
               TextFormField(
+                decoration: textInputDecoration(hintText: 'Password'),
+                validator: (val) => val.length < 6
+                    ? 'Enter a password with 6 or more characters '
+                    : null,
                 obscureText: true,
                 onChanged: (val) {
                   setState(() => password = val);
@@ -60,13 +70,28 @@ class _RegisterState extends State<Register> {
               SizedBox(height: 20),
               RaisedButton(
                 onPressed: () async {
-                  print(email);
-                  print(password);
+                  if (_formKey.currentState.validate()) {
+                    dynamic result = await _auth.registerWithEmailAndPassword(
+                        email: email, password: password);
+                    if (result == null) {
+                      setState(() {
+                        error = 'please supply a valid email';
+                      });
+                    }
+                  }
                 },
                 color: Colors.pink[400],
                 child: Text(
                   'Register',
                   style: TextStyle(color: Colors.white),
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                error,
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 14,
                 ),
               )
             ],
