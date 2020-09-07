@@ -73,6 +73,8 @@ class _SignInState extends State<SignIn> {
                     ),
                     SizedBox(height: 20),
                     RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0)),
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
                           setState(() => loading = true);
@@ -88,7 +90,7 @@ class _SignInState extends State<SignIn> {
                           }
                         }
                       },
-                      color: Colors.pink[400],
+                      color: Colors.brown[400],
                       child: Text(
                         'Sign in',
                         style: TextStyle(color: Colors.white),
