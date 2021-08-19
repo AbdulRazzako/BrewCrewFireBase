@@ -1,6 +1,7 @@
 # brew_crew
 
-A new Flutter project.
+A simple Firebase app using firebase as backend 
+This app allow other users to know your coffee preference 
 
 ## Getting Started
 
